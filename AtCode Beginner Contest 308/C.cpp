@@ -5,34 +5,40 @@
 #include <algorithm>
 using namespace std;
 
-bool compare(const pair<double, long long int> &a, const pair<double, long long int> &b)
-{
-    if (a.first != b.first)
-        return (a.first > b.first);
-    else
-        return (a.second < b.second);
-}
-
 int main()
 {
+
     long long int size;
     cin >> size;
 
-    vector<pair<double, long long int>> nums(size);
+    vector<pair<long long int, long long int>> nums(size);
 
     for (long long int i = 0; i < size; i++)
     {
-        double a, b;
+        long long int a, b;
         cin >> a >> b;
-        nums[i] = make_pair((a / (a + b)), i);
+        nums[i] = make_pair(a, a + b);
     }
 
-    sort(nums.begin(), nums.end(), compare);
-
-    for (auto x : nums)
+    auto comapre = [&](int i, int j)
     {
-        cout << x.second + 1 << " ";
-    }
+        long long ai, bi, aj, bj;
+        ai = nums[i].first;
+        bi = nums[i].second;
+        aj = nums[j].first;
+        bj = nums[j].second;
 
+        return (ai * bj > aj * bi);
+    };
+
+    vector<long long int> memo(size);
+
+    for (int i = 0; i < size; i++)
+        memo[i] = i;
+
+    stable_sort(memo.begin(), memo.end(), comapre);
+
+    for (auto x : memo)
+        cout << x + 1 << " ";
     return 0;
 }
